@@ -2,32 +2,53 @@ name: Build A Website Using Hugo
 
 on:
   push:
-    branches: [ main ]
-  pull_request: 
-    branches: [ main ]
-  
+    branches:
+      - main
+
 jobs:
   deploy: 
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for AWS CLI authentication
       contents: read # Required for checkout@v2
+
     steps:
-      # Step: AWS Credentials Configuration
-        - name: Configure AWS Credentials
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            aws-region: ${{secrets.AWS_REGION}}
-            role-to-assume: ${{secrets.AWS_IAM_ROLE}}
+      # Step: Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # Step: S3 Sync
-        - name: S3 Sync
-          run: |
-            aws s3 sync . s3://${{secrets.S3_BUCKET_NAME}} --delete 
+      # Step: Install Hugo
+      - name: Install Hugo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y hugo
 
-      # Step: Invalidate CloudFront cache to ensure changes are Visible
-        - name: Invalidate The CloudFront cache
-          run: |
-            aws cloudfront create-invalidation \
-            --distribution-id ${{secrets.CLOUDFRONT_DISTRIBUTION_ID}} \
-            --paths "/*" \
+      # Step: Build the Hugo Site
+      - name: Build Hugo Site
+        run: hugo --minify
+
+      # Step: Upload Build Artifact (Optional)
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hugo-site
+          path: public/
+
+      # Step: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+
+      # Step: S3 Sync (Deploy Hugo Site)
+      - name: Deploy to S3
+        run: |
+          aws s3 sync public/ s3://${{ secrets.S3_BUCKET_NAME }} --delete 
+
+      # Step: Invalidate CloudFront cache
+      - name: Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
