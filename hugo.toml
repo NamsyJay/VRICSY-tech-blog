@@ -142,7 +142,7 @@ theme = "LoveIt"
       # URL of the LOGO
       logo = ""
       # title name
-      name = "NAME_OF_YOUR_BLOG"
+      name = "VRICSY Blog"
       # you can add extra information before the name (HTML format is supported), such as icons
       pre = ""
       # you can add extra information after the name (HTML format is supported), such as icons
@@ -196,7 +196,7 @@ theme = "LoveIt"
       # Gravatar Email for preferred avatar in home page
       gravatarEmail = ""
       # URL of avatar shown in home page (LINK_TO_YOUR_PHOTO_BELOW)
-      avatarURL = "https://postimg.cc/56SNYHF5"
+      avatarURL = "https://raw.githubusercontent.com/NamsyJay/VRICSY-tech-blog/refs/heads/main/VRICSY-The.webp"
       #  title shown in home page (HTML format is supported)
       title = "VRICSY Engineering Blog"
       # subtitle shown in home page
@@ -219,7 +219,7 @@ theme = "LoveIt"
   # Social config about the author
   [params.social]
     Bitbucket = ""
-    GitHub = ""
+    GitHub = "https://github.com/NamsyJay"
     Linkedin = "https://www.linkedin.com/in/babajide-onamusi-devopsengineer/"
     Twitter = ""
     Gitlab = ""
