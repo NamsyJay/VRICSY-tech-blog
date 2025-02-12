@@ -1,0 +1,33 @@
+name: Build A Website Using Hugo
+
+on:
+  push:
+    branches: [ main ]
+  pull_request: 
+    branches: [ main ]
+  
+jobs:
+  deploy: 
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for AWS CLI authentication
+      contents: read # Required for checkout@v2
+    steps:
+      # Step: AWS Credentials Configuration
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-region: ${{secrets.AWS_REGION}}
+            role-to-assume: ${{secrets.AWS_IAM_ROLE}}
+
+      # Step: S3 Sync
+        - name: S3 Sync
+          run: |
+            aws s3 sync . s3://${{secrets.S3_BUCKET_NAME}} --delete 
+
+      # Step: Invalidate CloudFront cache to ensure changes are Visible
+        - name: Invalidate The CloudFront cache
+          run: |
+            aws cloudfront create-invalidation \
+            --distribution-id ${{secrets.CLOUDFRONT_DISTRIBUTION_ID}} \
+            --paths "/*" \
