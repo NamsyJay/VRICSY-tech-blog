@@ -17,8 +17,10 @@ jobs:
         - name: Configure AWS Credentials
           uses: aws-actions/configure-aws-credentials@v4
           with:
-            aws-region: ${{env.AWS_REGION}}
+            aws-region: ${{secrets.AWS_REGION}}
             role-to-assume: ${{secrets.AWS_IAM_ROLE}}
+        - name: Verify AWS Identity 
+          run: aws sts get-caller-identity
 
       # Step: S3 Sync
         - name: S3 Sync
