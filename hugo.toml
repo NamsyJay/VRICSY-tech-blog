@@ -1,4 +1,4 @@
-baseURL = "http://startupclars-1263.s3-website.eu-west-2.amazonaws.com/"
+baseURL = "https://d2e4c0gur0aw78.cloudfront.net"
 # [en, zh-cn, fr, ...] determines default content language
 defaultContentLanguage = "en"
 # language code
