@@ -1,4 +1,4 @@
-baseURL = "https://d2e4c0gur0aw78.cloudfront.net"
+baseURL = "https://yourdomain.com"
 # [en, zh-cn, fr, ...] determines default content language
 defaultContentLanguage = "en"
 # language code
